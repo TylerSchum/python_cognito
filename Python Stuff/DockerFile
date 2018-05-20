@@ -1,0 +1,14 @@
+FROM ubuntu:12.04
+
+RUN apt-get update
+RUN apt-get install -y python python-pip python-virtualenv gunicorn
+RUN mkdir -p /web.py
+COPY gunicorn_config.py /gunicorn_config.py
+COPY web.py /web.py
+RUN pip install -r /deploy/app/requirements.txt
+
+WORKDIR ./
+
+EXPOSE 80
+
+CMD ["/usr/bin/gunicorn", "--config", "/gunicorn_config.py", "web.py"]
